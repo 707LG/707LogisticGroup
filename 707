@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>707 Logistic Group - Расчёт доставки грузов из Китая</title>
+  <meta name="description" content="Расчёт стоимости карго из Китая в Россию, Казахстан, Кыргызстан по плотности. Выкуп с 1688, Taobao. Полный цикл с 2004 года."/>
+  <meta name="keywords" content="доставка грузов из Китая, карго в Россию Казахстан Кыргызстан, расчёт логистики по плотности, выкуп с Taobao 1688 Poizon, фулфилмент под ключ"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #f8f9fa; scroll-behavior: smooth; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+    
+    /* Шапка */
+    header { background: #007bff; color: white; padding: 1.5rem 0; text-align: center; }
+    header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    header p { opacity: 0.9; }
+    
+    /* Меню-кнопки */
+    nav { background: #e9ecef; padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 10; }
+    nav button { background: none; border: none; margin: 0 1rem; color: #007bff; font-weight: bold; font-size: 1.1rem; cursor: pointer; padding: 0.5rem 1rem; border-radius: 8px; transition: 0.3s; }
+    nav button:hover { background: #007bff; color: white; }
+    nav button.active { background: #007bff; color: white; }
+    
+    /* Секции */
+    section { background: white; margin: 2rem 0; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); scroll-margin-top: 80px; }
+    h2 { color: #007bff; margin-bottom: 1rem; font-size: 1.5rem; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
+    
+    /* Калькулятор */
+    .calculator { display: grid; gap: 1rem; max-width: 500px; margin: 1.5rem 0; }
+    label { font-weight: 600; color: #2c3e50; }
+    input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; width: 100%; }
+    button.calc-btn { background: #007bff; color: white; border: none; padding: 14px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    button.calc-btn:hover { background: #0056b3; }
+    .result { margin-top: 1rem; padding: 1rem; background: #d1ecf1; border-radius: 8px; font-weight: bold; color: #007bff; display: none; text-align: center; }
+    .order-section { margin-top: 1.5rem; padding: 1.5rem; background: #e3f2fd; border-radius: 8px; display: none; }
+    .order-section h3 { color: #007bff; margin-bottom: 1rem; font-size: 1.3rem; text-align: center; }
+    
+    /* Контакты */
+    .contacts { display: grid; gap: 0.8rem; font-size: 1.1rem; }
+    .contacts strong { color: #007bff; }
+    .contacts a { color: #007bff; text-decoration: none; }
+    .contacts a:hover { text-decoration: underline; }
+    
+    /* Футер */
+    footer { text-align: center; padding: 2rem 0; color: #6c757d; font-size: 0.9rem; border-top: 1px solid #eee; margin-top: 3rem; }
+    
+    /* Адаптив */
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.6rem; }
+      nav button { margin: 0.5rem; display: block; width: 100%; }
+      .calculator { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Шапка -->
+  <header>
+    <div class="container">
+      <h1>707 Logistic Group</h1>
+      <p>Доставляем прибыль, а не просто грузы из Китая</p>
+    </div>
+  </header>
+  
+  <!-- Меню-кнопки -->
+  <nav>
+    <div class="container">
+      <button onclick="scrollToSection('calculator')" class="active">Расчёт</button>
+      <button onclick="scrollToSection('about')">О нас</button>
+      <button onclick="scrollToSection('contacts')">Контакты</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Блок: Расчёт -->
+    <section id="calculator">
+      <h2>Расчёт стоимости доставки</h2>
+      <p>Введите габариты упаковки (см) и вес (кг, минимум 30 кг). Расчёт по коэффициенту плотности.</p>
+      
+      <div class="calculator">
+        <div><label>Длина (см):</label><input type="number" id="length" min="1" placeholder="например, 50"></div>
+        <div><label>Ширина (см):</label><input type="number" id="width" min="1" placeholder="например, 40"></div>
+        <div><label>Высота (см):</label><input type="number" id="height" min="1" placeholder="например, 30"></div>
+        <div><label>Вес (кг):</label><input type="number" id="weight" min="30" step="0.1" placeholder="минимум 30"></div>
+        <button class="calc-btn" onclick="calculate()">Рассчитать</button>
+        
+        <div class="result" id="result"></div>
+        
+        <!-- Секция "Заказать доставку" с контактами (появляется после расчёта) -->
+        <div class="order-section" id="orderSection">
+          <h3>Заказать доставку</h3>
+          <div class="contacts">
+            <p><strong>WhatsApp/Telegram/WeChat:</strong> <a href="https://wa.me/8613581739032" target="_blank">+86 135 8173 9032</a></p>
+            <p><strong>WhatsApp:</strong> <a href="https://wa.me/8613811562707" target="_blank">+86 138 1156 2707</a></p>
+            <p><strong>Telegram-канал:</strong> <a href="https://t.me/Cargo707A" target="_blank">t.me/Cargo707A</a></p>
+          </div>
+        </div>
+      </div>
+      
+      <p><small>Коэффициент плотности = вес (кг) / объём (м³). Если плотность >400 — $3.00, если <100 — $4.40.</small></p>
+    </section>
+
+    <!-- Блок: О нас -->
+    <section id="about">
+      <h2>О компании</h2>
+      <p>707 Logistic Group - ваш надежный партнер по доставке грузов из Китая в Россию, Казахстан и Кыргызстан. С 2004 года мы обеспечиваем быстрый и безопасный полный цикл логистики: от забора товара на складе в поставщика до города получателя. Работаем со всеми видами грузов - сборными, контейнерными, негабаритными и даже опасными, начиная от 30 кг, решая любые задачи без простоев.</p>
+      <p>Мы выкупаем товары с любых китайских площадок - 1688, Taobao, Poizon, Pinduoduo. Мы находим лучшие цены, проводим безопасные переводы по выгодному курсу без скрытых комиссий, снимаем и проверяем образцы, чтобы вы получили именно то, что ожидали. На собственных складах в Гуанчжоу, Иу, Пекине, Москве и Алматы консолидируем поставки от разных производителей, проверяем качество, упаковываем, возвращаем брак на фабрику. Свой автопарк позволяет снижать стоимость логистики, а страховка на полную стоимость защищает от любых рисков. Личный менеджер отвечает в мессенджерах в течение 15 минут, а офис в Москве всегда на связи для вашего удобства.</p>
+      <p>С нами вы получаете не просто доставку, а готовое решение для роста бизнеса: от поиска и выкупа до фулфилмента и доставки «под ключ». <strong>707 Logistic Group - доставляем прибыль, а не просто грузы.</strong></p>
+    </section>
+
+    <!-- Блок: Контакты -->
+    <section id="contacts">
+      <h2>Контакты для связи</h2>
+      <div class="contacts">
+        <p><strong>WhatsApp/Telegram/WeChat:</strong> <a href="https://wa.me/8613581739032" target="_blank">+86 135 8173 9032</a></p>
+        <p><strong>WhatsApp:</strong> <a href="https://wa.me/8613811562707" target="_blank">+86 138 1156 2707</a></p>
+        <p><strong>Telegram-канал:</strong> <a href="https://t.me/Cargo707A" target="_blank">t.me/Cargo707A</a></p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Футер -->
+  <footer>
+    <div class="container">
+      &copy; 2025 707 Logistic Group. Все права защищены.
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Скролл к секции
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    // Калькулятор
+    function calculate() {
+      const l = parseFloat(document.getElementById('length').value) || 0;
+      const w = parseFloat(document.getElementById('width').value) || 0;
+      const h = parseFloat(document.getElementById('height').value) || 0;
+      const weight = parseFloat(document.getElementById('weight').value) || 0;
+      
+      if (l <= 0 || w <= 0 || h <= 0 || weight < 30) {
+        alert('Заполните все поля корректно! Вес минимум 30 кг.');
+        return;
+      }
+      
+      const volume = (l * w * h) / 1000000; // м³
+      if (volume === 0) return;
+      const density = weight / volume;
+      
+      let pricePerKg;
+      if (density > 400) pricePerKg = 3.00;
+      else if (density >= 350) pricePerKg = 3.10;
+      else if (density >= 300) pricePerKg = 3.20;
+      else if (density >= 250) pricePerKg = 3.30;
+      else if (density >= 200) pricePerKg = 3.40;
+      else if (density >= 190) pricePerKg = 3.50;
+      else if (density >= 180) pricePerKg = 3.60;
+      else if (density >= 170) pricePerKg = 3.70;
+      else if (density >= 160) pricePerKg = 3.80;
+      else if (density >= 150) pricePerKg = 3.90;
+      else if (density >= 140) pricePerKg = 4.00;
+      else if (density >= 130) pricePerKg = 4.10;
+      else if (density >= 120) pricePerKg = 4.20;
+      else if (density >= 110) pricePerKg = 4.30;
+      else pricePerKg = 4.40; // <100 или <110
+      
+      const total = pricePerKg * weight;
+      
+      const result = document.getElementById('result');
+      result.style.display = 'block';
+      result.innerHTML = `
+        <strong>Коэффициент плотности:</strong> ${density.toFixed(2)} кг/м³<br>
+        <strong>Цена за 1 кг:</strong> $${pricePerKg.toFixed(2)}<br>
+        <strong style="font-size:1.2rem;">Общая стоимость за груз (${weight} кг):</strong> $${total.toFixed(2)}
+      `;
+
+      // Показать секцию "Заказать доставку" с контактами
+      document.getElementById('orderSection').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
